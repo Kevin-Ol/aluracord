@@ -19,5 +19,8 @@ module.exports = {
   ],
   rules: {
     'react/prop-types': 0,
+    "react/jsx-props-no-spreading": [{
+      "custom": "ignore" | "enforce",
+  }]
   },
 };

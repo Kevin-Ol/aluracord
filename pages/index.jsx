@@ -1,39 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 import {
   Box, Button, Text, TextField, Image,
 } from '@skynexui/components';
 
 import appConfig from '../config.json';
-
-function GlobalStyle() {
-  return (
-    <style global jsx>
-      {`
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        list-style: none;
-      }
-      body {
-        font-family: 'Open Sans', sans-serif;
-      }
-      /* App fit Height */ 
-      html, body, #__next {
-        min-height: 100vh;
-        display: flex;
-        flex: 1;
-      }
-      #__next {
-        flex: 1;
-      }
-      #__next > * {
-        flex: 1;
-      }
-    `}
-    </style>
-  );
-}
 
 function Title({ children, tag }) {
   const Tag = tag || 'h1';
@@ -55,11 +26,12 @@ function Title({ children, tag }) {
 }
 
 export default function HomePage() {
-  const username = 'kevin-ol';
+  const [username, setUsername] = useState('');
+  const [btnDisabled, setBtnDisabled] = useState(true);
+  const router = useRouter();
 
   return (
     <>
-      <GlobalStyle />
       <Box
         styleSheet={{
           display: 'flex',
@@ -92,6 +64,10 @@ export default function HomePage() {
           {/* Formulário */}
           <Box
             as="form"
+            onSubmit={(event) => {
+              event.preventDefault();
+              router.push('/chat');
+            }}
             styleSheet={{
               display: 'flex',
               flexDirection: 'column',
@@ -115,6 +91,14 @@ export default function HomePage() {
             </Text>
 
             <TextField
+              value={username}
+              onChange={({ target: { value } }) => {
+                setUsername(value)
+                if (value.length <= 2) {
+                  return setBtnDisabled(true)
+                }
+                setBtnDisabled(false)
+              }}
               fullWidth
               textFieldColors={{
                 neutral: {
@@ -128,6 +112,7 @@ export default function HomePage() {
             <Button
               type="submit"
               label="Entrar"
+              disabled={btnDisabled}
               fullWidth
               buttonColors={{
                 contrastColor: appConfig.theme.colors.neutrals[900],
@@ -155,26 +140,30 @@ export default function HomePage() {
               minHeight: '240px',
             }}
           >
-            <Image
-              styleSheet={{
-                borderRadius: '50%',
-                marginBottom: '16px',
-              }}
-              src={`https://github.com/${username}.png`}
-            />
-            <Text
-              variant="body4"
-              styleSheet={{
-                color: appConfig.theme.colors.primary['300'],
-                backgroundColor: appConfig.theme.colors.neutrals[900],
-                border: '1px solid',
-                borderColor: appConfig.theme.colors.primary['200'],
-                padding: '3px 10px',
-                borderRadius: '1000px',
-              }}
-            >
-              {username}
-            </Text>
+            { !btnDisabled &&
+              <>
+                <Image
+                  styleSheet={{
+                    borderRadius: '50%',
+                    marginBottom: '16px',
+                  }}
+                  src={`https://github.com/${username}.png`}
+                />
+                <Text
+                  variant="body4"
+                  styleSheet={{
+                    color: appConfig.theme.colors.primary['300'],
+                    backgroundColor: appConfig.theme.colors.neutrals[900],
+                    border: '1px solid',
+                    borderColor: appConfig.theme.colors.primary['200'],
+                    padding: '3px 10px',
+                    borderRadius: '1000px',
+                  }}
+                >
+                  {username}
+                </Text>
+              </>
+            }
           </Box>
           {/* Photo Area */}
         </Box>
