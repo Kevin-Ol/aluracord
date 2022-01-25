@@ -1,10 +1,14 @@
-import { Box, Button, Text, TextField, Image } from '@skynexui/components';
+import React from 'react';
+import {
+  Box, Button, Text, TextField, Image,
+} from '@skynexui/components';
 
-import appConfig from '../config.json'
+import appConfig from '../config.json';
 
 function GlobalStyle() {
   return (
-    <style global jsx>{`
+    <style global jsx>
+      {`
       * {
         margin: 0;
         padding: 0;
@@ -28,64 +32,43 @@ function GlobalStyle() {
       }
     `}
     </style>
-  )
+  );
 }
 
-// function Title({children, tag: Tag}) {
-//   return (
-//     <>
-//       <Tag>{children}</Tag>
-//       <style jsx>{`
-//         ${Tag} {
-//           color: ${appConfig.theme.colors.neutrals['900']};
-//           font-size: 24px;
-//           font-weight: 600;
-//         }
-//       `}</style>
-//     </>
-//   )
-// }
-
-function Titulo(props) {
-  const Tag = props.tag || 'h1';
+function Title({ children, tag }) {
+  const Tag = tag || 'h1';
   return (
     <>
-      <Tag>{props.children}</Tag>
-      <style jsx>{`
-            ${Tag} {
-                color: ${appConfig.theme.colors.neutrals['000']};
-                font-size: 24px;
-                font-weight: 600;
-            }
-            `}</style>
+      <Tag>{children}</Tag>
+      <style jsx>
+        {`
+          ${Tag} {
+              color: ${appConfig.theme.colors.primary['600']};
+              font-size: 28px;
+              font-weight: 600;
+              -webkit-text-stroke: 0.7px black;
+          }
+        `}
+      </style>
     </>
   );
 }
 
-// function HomePage() {
-//   return (
-//     <div>
-//       <GlobalStyle />
-//       <Title tag="h2">Boas vindas de volta!</Title>
-//       <h2>Discord - Alura Matrix</h2>
-//     </div>
-//   )
-// }
-
-// export default HomePage
-
-export default function PaginaInicial() {
-  const username = 'peas';
+export default function HomePage() {
+  const username = 'kevin-ol';
 
   return (
     <>
       <GlobalStyle />
       <Box
         styleSheet={{
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          backgroundColor: appConfig.theme.colors.primary[500],
-          backgroundImage: 'url(https://virtualbackgrounds.site/wp-content/uploads/2020/08/the-matrix-digital-rain.jpg)',
-          backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundBlendMode: 'multiply',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundImage: 'url(https://i.pinimg.com/originals/ad/66/49/ad66497baf21cb2ae11d65be0b59cc63.jpg)',
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: 'cover',
+          backgroundBlendMode: 'multiply',
         }}
       >
         <Box
@@ -97,22 +80,37 @@ export default function PaginaInicial() {
               xs: 'column',
               sm: 'row',
             },
-            width: '100%', maxWidth: '700px',
-            borderRadius: '5px', padding: '32px', margin: '16px',
+            width: '100%',
+            maxWidth: '800px',
+            borderRadius: '5px',
+            padding: '64px',
+            margin: '16px',
             boxShadow: '0 2px 10px 0 rgb(0 0 0 / 20%)',
-            backgroundColor: appConfig.theme.colors.neutrals[700],
+            backgroundColor: 'rgba(22, 22, 22, 0.35)',
           }}
         >
           {/* Formulário */}
           <Box
             as="form"
             styleSheet={{
-              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-              width: { xs: '100%', sm: '50%' }, textAlign: 'center', marginBottom: '32px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: { xs: '100%', sm: '50%' },
+              textAlign: 'center',
+              marginBottom: '32px',
             }}
           >
-            <Titulo tag="h2">Boas vindas de volta!</Titulo>
-            <Text variant="body3" styleSheet={{ marginBottom: '32px', color: appConfig.theme.colors.neutrals[300] }}>
+            <Title tag="h2">Boas vindas de volta!</Title>
+            <Text
+              variant="body3"
+              styleSheet={{
+                marginBottom: '32px',
+                fontSize: '16px',
+                color: appConfig.theme.colors.primary[500],
+              }}
+            >
               {appConfig.name}
             </Text>
 
@@ -120,19 +118,19 @@ export default function PaginaInicial() {
               fullWidth
               textFieldColors={{
                 neutral: {
-                  textColor: appConfig.theme.colors.neutrals[200],
+                  textColor: appConfig.theme.colors.neutrals[100],
                   mainColor: appConfig.theme.colors.neutrals[900],
                   mainColorHighlight: appConfig.theme.colors.primary[500],
-                  backgroundColor: appConfig.theme.colors.neutrals[800],
+                  backgroundColor: appConfig.theme.colors.neutrals[700],
                 },
               }}
             />
             <Button
-              type='submit'
-              label='Entrar'
+              type="submit"
+              label="Entrar"
               fullWidth
               buttonColors={{
-                contrastColor: appConfig.theme.colors.neutrals["000"],
+                contrastColor: appConfig.theme.colors.neutrals[900],
                 mainColor: appConfig.theme.colors.primary[500],
                 mainColorLight: appConfig.theme.colors.primary[400],
                 mainColorStrong: appConfig.theme.colors.primary[600],
@@ -140,7 +138,6 @@ export default function PaginaInicial() {
             />
           </Box>
           {/* Formulário */}
-
 
           {/* Photo Area */}
           <Box
@@ -150,9 +147,9 @@ export default function PaginaInicial() {
               alignItems: 'center',
               maxWidth: '200px',
               padding: '16px',
-              backgroundColor: appConfig.theme.colors.neutrals[800],
+              backgroundColor: 'rgba(11, 11, 11, 0.8)',
               border: '1px solid',
-              borderColor: appConfig.theme.colors.neutrals[999],
+              borderColor: appConfig.theme.colors.primary['200'],
               borderRadius: '10px',
               flex: 1,
               minHeight: '240px',
@@ -168,10 +165,12 @@ export default function PaginaInicial() {
             <Text
               variant="body4"
               styleSheet={{
-                color: appConfig.theme.colors.neutrals[200],
+                color: appConfig.theme.colors.primary['300'],
                 backgroundColor: appConfig.theme.colors.neutrals[900],
+                border: '1px solid',
+                borderColor: appConfig.theme.colors.primary['200'],
                 padding: '3px 10px',
-                borderRadius: '1000px'
+                borderRadius: '1000px',
               }}
             >
               {username}
