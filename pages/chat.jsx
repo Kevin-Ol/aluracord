@@ -1,20 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import appConfig from '../config.json';
 import { Box, Text, TextField, Image, Button } from '@skynexui/components';
+import { createClient } from '@supabase/supabase-js'
+
+const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL
+
+const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 export default function ChatPage() {
   const [message, setMessage] = useState('');
   const [messagesList, setMessagesList] = useState([]);
+  const [loading, setLoading] = useState(true); 
 
-  const handleNewMessage = (newMessage) => {
-    const messageDetails = {
-      text: newMessage,
-      from: 'kevin',
-      id: messagesList[0]?.id + 1 || 1,
+  useEffect(() => {
+    const fetchSupabase = async () => {
+      const { data } = await supabaseClient
+        .from('messages')
+        .select('*')
+        .order('id', { ascending: false });
+
+      setMessagesList(data);
+      setLoading(false);
     }
 
+    fetchSupabase();
+  }, [])
+
+  const handleNewMessage = async (newMessage) => {
+    const messageDetails = {
+      text: newMessage,
+      from: 'kevin-ol',
+    }
+
+    const { data } = await supabaseClient.from('messages').insert([messageDetails]);
+
     setMessage('');
-    setMessagesList((oldList) => [messageDetails, ...oldList]);
+    setMessagesList((oldList) => [data[0], ...oldList]);
   }
 
   const removeMessage = (messageId) => {
@@ -63,7 +85,7 @@ export default function ChatPage() {
           }}
         >
 
-          <MessageList messages={messagesList} removeMessage={removeMessage} />
+          <MessageList messages={messagesList} removeMessage={removeMessage} loading={loading} />
 
           <Box
             as="form"
@@ -141,7 +163,7 @@ function Header() {
   )
 }
 
-function MessageList({ messages, removeMessage }) {
+function MessageList({ messages, removeMessage, loading }) {
   return (
     <Box
       tag="ul"
@@ -155,7 +177,7 @@ function MessageList({ messages, removeMessage }) {
         position: 'relative'
       }}
     >
-
+      { loading && <p>Carregando mensagens...</p> }
       {messages.map((message) => (
         <Text
           key={message.id}
@@ -182,7 +204,7 @@ function MessageList({ messages, removeMessage }) {
                 display: 'inline-block',
                 marginRight: '8px',
               }}
-              src={`https://github.com/vanessametonini.png`}
+              src={`https://github.com/${message.from}.png`}
             />
             <Text tag="strong">
                 {message.from}
