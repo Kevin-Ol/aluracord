@@ -1,4 +1,5 @@
 import React from 'react';
+import Head from 'next/head'
 
 function GlobalStyle() {
   return (
@@ -34,6 +35,13 @@ export default function MyApp({ Component, pageProps }) {
 
   return (
     <>
+      <Head>
+        <meta charSet="UTF-8" />
+        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Aluracord &mdash; The Witcher</title>
+        <meta property="og:title" content="My page title" key="title" />
+      </Head>
       <GlobalStyle />
       <Component {...pageProps} />
     </>
